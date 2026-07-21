@@ -68,6 +68,6 @@ int main (void)
         break;
 
     }
-
+    main
     return 0;
 }
