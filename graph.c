@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "graph.h"
 
+
+
 void adicionarAresta(Grafo *g, int origem, int destino, int peso) {
     No *novo = (No*) malloc(sizeof(No));
     novo->destino = destino;
