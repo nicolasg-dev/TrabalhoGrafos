@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "graph.h"
+
 void printMenu()
 {
     printf("=== SISTEMA DE GRAFOS ===\n");
@@ -16,58 +17,65 @@ void printMenu()
 
 }
 
-int main (void)
+void Menu ()
 {
-    void printMenu();
+    int num = 0;
     printMenu();
 
-    int num = 0;
-
-    scanf("%d", &num);
-
-    switch (num)
+    while (1 == 1)
     {
-    case 1:
-        printf("Carregar grafo de arquivo.\n");
-        break;
+        scanf("%d", &num);
+        switch (num)
+        {
+        case 1:
+            printf("=== Carregar grafo de arquivo ===\n");
 
-    case 2:
-        printf("Mostrar grafo (lista de adjacencia).\n");
-        break;
+            break;
 
-    case 3:
-        printf("Busca em Profundidade (DFS).\n");
-        break;
+        case 2:
+            printf("=== Mostrar grafo (lista de adjacencia) ===\n");
+            break;
 
-    case 4:
-        printf("Busca em Largura (BFS).\n");
-        break;
+        case 3:
+            printf("=== Busca em Profundidade (DFS) ===\n");
+            break;
 
-    case 5:
-        printf("Ordenacao Topologica.\n");
-        break;
+        case 4:
+            printf("=== Busca em Largura (BFS) ===\n");
+            break;
 
-    case 6:
-        printf("Arvore Geradora Minima (Prim).\n");
-        break;
+        case 5:
+            printf("=== Ordenacao Topologica ===\n");
+            break;
 
-    case 7:
-        printf("Menor Caminho (Dijkstra).\n");
-        break;
+        case 6:
+            printf("=== Arvore Geradora Minima (Prim) ===\n");
+            break;
 
-    case 8:
-        printf("Estatisticas do grafo.\n");
-        break;
+        case 7:
+            printf("=== Menor Caminho (Dijkstra) ===\n");
+            break;
 
-    case 9:
-        printf("Encerrando o programa.\n");
-        break;
+        case 8:
+            printf("=== Estatisticas do grafo ===\n");
+            break;
 
-    default:
-        printf("Opcao invalida.\n");
-        break;
+        case 9:
+            printf("=== Encerrando o programa ===\n");
+            break;
 
+        default:
+            printf("Opcao invalida.\n");
+            break;
+        }
     }
-    main
+
+}
+
+int main (void)
+{
+    Menu();
+
+
     return 0;
 }
