@@ -1,6 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include "graph.h"
+
+void encerra()
+{
+    printf("=== Encerrando o programa ===\n");
+    //liberar memória usada ao decorrer do programa, talvez
+}
 
 void printMenu()
 {
@@ -17,65 +24,81 @@ void printMenu()
 
 }
 
-void Menu ()
+void Menu()
 {
-    int num = 0;
     printMenu();
 
-    while (1 == 1)
+    int num = 0;
+
+    scanf("%d", &num);
+    getchar();
+
+    switch (num)
     {
-        scanf("%d", &num);
-        switch (num)
-        {
-        case 1:
-            printf("=== Carregar grafo de arquivo ===\n");
+    case 1:
+        printf("=== Carregar grafo de arquivo ===\n");
+        //chama função desejada
+        Menu();
+        break;
 
-            break;
+    case 2:
+        printf("=== Mostrar grafo (lista de adjacencia) ===\n");
+        //chama função desejada
+        Menu();
+        break;
 
-        case 2:
-            printf("=== Mostrar grafo (lista de adjacencia) ===\n");
-            break;
+    case 3:
+        printf("=== Busca em Profundidade (DFS) ===\n");
+        //chama função desejada
+        Menu();
+        break;
 
-        case 3:
-            printf("=== Busca em Profundidade (DFS) ===\n");
-            break;
+    case 4:
+        printf("=== Busca em Largura (BFS) ===\n");
+        //chama função desejada
+        Menu();
+        break;
 
-        case 4:
-            printf("=== Busca em Largura (BFS) ===\n");
-            break;
+    case 5:
+        printf("=== Ordenacao Topologica ===\n");
+        //chama função desejada
+        Menu();
+        break;
 
-        case 5:
-            printf("=== Ordenacao Topologica ===\n");
-            break;
+    case 6:
+        printf("=== Arvore Geradora Minima (Prim) ===\n");
+        //chama função desejada
+        Menu();
+        break;
 
-        case 6:
-            printf("=== Arvore Geradora Minima (Prim) ===\n");
-            break;
+    case 7:
+        printf("=== Menor Caminho (Dijkstra) ===\n");
+        //chama função desejada
+        Menu();
+        break;
 
-        case 7:
-            printf("=== Menor Caminho (Dijkstra) ===\n");
-            break;
+    case 8:
+        printf("=== Estatisticas do grafo ===\n");
+        //chama função desejada
+        Menu();
+        break;
 
-        case 8:
-            printf("=== Estatisticas do grafo ===\n");
-            break;
+    case 9:
+        encerra();
+        return;
 
-        case 9:
-            printf("=== Encerrando o programa ===\n");
-            break;
-
-        default:
-            printf("Opcao invalida.\n");
-            break;
-        }
+    default:
+        printf("Opcao invalida.\n");
+        Menu();
+        break;
     }
-
 }
+
 
 int main (void)
 {
-    Menu();
 
+    Menu();
 
     return 0;
 }
