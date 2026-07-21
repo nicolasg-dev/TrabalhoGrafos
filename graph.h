@@ -2,18 +2,19 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-typedef struct No{
+typedef struct No {
     int destino;
     int peso;
     int chave;
     struct No* pai;
-    struct No* prox;
-}No;
+    struct No *prox;
+} No;
 
-typedef struct{
-    int V;
-    No **lista;
-}Grafo;
+typedef struct {
+    int V;      // Número de vértices
+    int A;      // Número de arestas
+    No **lista; // Lista de adjacência
+} Grafo;
 
 typedef struct pilha
 {
