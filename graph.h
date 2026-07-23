@@ -21,13 +21,19 @@ typedef struct pilha
     No* topo;
 }Pilha;
 
+Grafo* criarGrafo(int vertices);
+Grafo* lerArquivo(char *nome);
+void adicionarArestaOrdenado(Grafo *g, int origem, int destino, int peso);
 void adicionarAresta(Grafo *g, int origem, int destino, int peso);
 void removeVertice(Grafo *g, int alvo);
 void BFS(Grafo *g, int origem);
 void DFS(Grafo *g, int v, int visitado[]);
 void topoDFS(Grafo *g, int v, int visitado[], int pilha[], int *topo);
+Pilha* criaPilha(void);
 void addPilha(Pilha *pi, No *novo);
 void removePilha(Pilha *pi);
+int achaPilha(Pilha *pi, No *sugeito);
+No* extractMin(Pilha *pi);
 Grafo *Prim(Grafo *g, int r);
 
 #endif // GRAPH_H

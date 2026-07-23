@@ -98,7 +98,7 @@ void Menu()
 int main (void)
 {
 
-    Menu();
+    lerArquivo("grafo1.txt");
 
     return 0;
 }
