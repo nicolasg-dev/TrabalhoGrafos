@@ -3,6 +3,8 @@
 #include <ctype.h>
 #include "graph.h"
 
+Grafo* grafo = NULL;
+
 void encerra()
 {
     printf("=== Encerrando o programa ===\n");
@@ -36,14 +38,27 @@ void Menu()
     switch (num)
     {
     case 1:
+        char* nome;
         printf("=== Carregar grafo de arquivo ===\n");
+        printf("\nDigite o nome do arquivo: ");
+        scanf("%s", &nome);
+        grafo = lerArquivo(nome);
         //chama função desejada
         Menu();
         break;
 
     case 2:
         printf("=== Mostrar grafo (lista de adjacencia) ===\n");
-        //chama função desejada
+        if (grafo == NULL)
+        {
+            printf("Você ainda não carregou nenhum arquivo.\n");
+            getchar();
+        } else
+        {
+            mostrarGrafo(grafo);
+            getchar();
+        }
+
         Menu();
         break;
 
@@ -97,8 +112,7 @@ void Menu()
 
 int main (void)
 {
-
-    lerArquivo("grafo1.txt");
+    Menu();
 
     return 0;
 }

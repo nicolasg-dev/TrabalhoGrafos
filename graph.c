@@ -93,8 +93,8 @@ Grafo* leGrafo(char str[]) // key = 1 -> direcionado; 0 -> n direcionado
 Grafo *lerArquivo(char *nome){
     FILE *arquivo = fopen(nome, "r");
     if(arquivo == NULL){
-        printf("Erro ao abrir o arquivo!\n");
-        exit(100);
+        printf("\nErro ao abrir o arquivo!\n");
+        return NULL;
     }
     int Vertices, Arestas, Origem, Destino, Peso;
     fscanf(arquivo,"%d %d", &Vertices, &Arestas); //le os primeiros dois inteiros do arquivo para saber a quantidade de vertices e arestas
@@ -108,19 +108,6 @@ Grafo *lerArquivo(char *nome){
     } // o caso deu algum erro na leitura
     printf("Erro na leitura dos dados!\n");
 
-
-    for (int i = 0; i < g->V; i ++)
-    {
-        No * aux = g->lista[i];
-        printf("%d" , i+1);
-        while (aux != NULL)
-        {
-            aux = aux->prox;
-            printf("V%d (%d)", i, aux->peso);
-
-        }
-        printf("\n");
-    }
 }
 
 void adicionarArestaOrdenado(Grafo *g, int origem, int destino, int peso) {
@@ -161,6 +148,28 @@ void removeVertice(Grafo *g, int alvo)
     }
 
     free(g->lista[alvo]);
+}
+
+void mostrarGrafo(Grafo* g)
+{
+    if (g->lista == NULL)
+    {
+        printf("Grafo vazio!\n");
+        return;
+    }
+
+    for (int i = 0; i < g->V; i ++)
+    {
+        No * aux = g->lista[i];
+        printf("%d" , i);
+        while (aux != NULL)
+        {
+            aux = aux->prox;
+            printf("V%d (%d)", i, aux->peso);
+
+        }
+        printf("\n");
+    }
 }
 
 void DFS(Grafo *g, int v, int visitado[])

@@ -21,6 +21,8 @@ typedef struct pilha
     No* topo;
 }Pilha;
 
+
+void mostrarGrafo(Grafo* g);
 No* criarNo(int destino, int peso);
 Grafo* criarGrafo(int quantVertices);
 Grafo* lerArquivo(char *nome);
