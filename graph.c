@@ -3,17 +3,36 @@
 #include <ctype.h>
 #include "graph.h"
 
-Grafo* criarGrafo(int vertices)
-{
-    Grafo* grafo = (Grafo*) malloc(sizeof(Grafo));
-
-    for (int i = 0; i < vertices; i ++) // itera na lista de grafos, alocando cada vértice necessário
-    {
-        grafo->lista[i] = malloc (sizeof(No));
-        grafo->lista[i]->prox = NULL; //Claude sugeriu
+No *criarNo(int destino, int peso) {
+    No *novo=(No *)malloc(sizeof(No));
+    if(novo == NULL){
+        printf("Memoria insuficiente!\n");
+        exit(99);
     }
-    grafo->V = vertices;
-    return grafo;
+    novo->destino = destino;
+    novo->peso = peso;
+    novo->prox = NULL;
+    return novo;
+}
+
+Grafo *criarGrafo(int quantVertices) {
+    Grafo *g = (Grafo *)malloc(sizeof(Grafo));
+    if(g == NULL) {
+        printf("Memoria insuficiente!\n");
+        exit(99);
+    }
+    g->V = quantVertices;
+    g->A = 0;
+    g->lista = (No **)malloc(quantVertices * sizeof(No *));
+    if(g->lista == NULL) {
+        printf("Memoria insuficiente!\n");
+        free(g);
+        exit(99);
+    }
+    for(int i = 0; i < quantVertices; i++) {
+        g->lista[i] = NULL;
+    }
+    return g;
 }
 
 /*
@@ -81,7 +100,7 @@ Grafo *lerArquivo(char *nome){
     fscanf(arquivo,"%d %d", &Vertices, &Arestas); //le os primeiros dois inteiros do arquivo para saber a quantidade de vertices e arestas
     Grafo *g = criarGrafo(Vertices);
     while(fscanf(arquivo, "%d %d %d", &Origem, &Destino, &Peso) == 3){ //coleta os dados subsequentes de 3 em tres para adicionar as arestas
-        adicionarAresta(g, Origem, Destino, Peso); // fiz esse while de == 3 pois o retorno do fscanf é a quantidade de dados que ele le e enquanto ele ler
+        adicionarArestaOrdenado(g, Origem, Destino, Peso); // fiz esse while de == 3 pois o retorno do fscanf é a quantidade de dados que ele le e enquanto ele ler
     } // 3 arquivos o programa da certo
     fclose(arquivo);
     if(g->A == Arestas){
@@ -105,26 +124,20 @@ Grafo *lerArquivo(char *nome){
 }
 
 void adicionarArestaOrdenado(Grafo *g, int origem, int destino, int peso) {
-    No *novo = (No*) malloc(sizeof(No));
-    novo->destino = destino;
-    novo->peso = peso;
-    No* aux = g->lista[origem];
-    No* ant = g->lista[origem];
-    while (aux->destino < destino && aux->prox != NULL)
-    {
-        ant = aux;
-        aux = aux->prox;
+    No *novo = criarNo(destino, peso);
+    if(g->lista[origem] == NULL || destino < g->lista[origem]->destino){
+        novo->prox = g->lista[origem];
+        g->lista[origem] = novo;
     }
-    novo->prox = aux;
-    ant->prox = novo;
-}
-
-void adicionarAresta(Grafo *g, int origem, int destino, int peso) {
-    No *novo = (No*) malloc(sizeof(No));
-    novo->destino = destino;
-    novo->peso = peso;
-    novo->prox = g->lista[origem];
-    g->lista[origem] = novo;
+    else {
+        No *atual = g->lista[origem];
+        while (atual->prox != NULL && atual->prox->destino < destino) {
+            atual = atual->prox;
+        }
+        novo->prox = atual->prox;
+        atual->prox = novo;
+    }
+    g->A++;
 }
 
 void removeVertice(Grafo *g, int alvo)
