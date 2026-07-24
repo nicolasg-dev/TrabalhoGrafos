@@ -38,11 +38,11 @@ void Menu()
     switch (num)
     {
     case 1:
-        char* nome;
+        /*char nome[100];
         printf("=== Carregar grafo de arquivo ===\n");
         printf("\nDigite o nome do arquivo: ");
-        scanf("%s", &nome);
-        grafo = lerArquivo(nome);
+        fgets(nome, 100, stdin);*/
+        grafo = lerArquivo("grafo1.txt");
         //chama função desejada
         Menu();
         break;
@@ -51,7 +51,7 @@ void Menu()
         printf("=== Mostrar grafo (lista de adjacencia) ===\n");
         if (grafo == NULL)
         {
-            printf("Você ainda não carregou nenhum arquivo.\n");
+            printf("\nVocê ainda não carregou nenhum arquivo.\n");
             getchar();
         } else
         {
