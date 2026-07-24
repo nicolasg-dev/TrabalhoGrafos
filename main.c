@@ -9,6 +9,7 @@ void encerra()
 {
     printf("=== Encerrando o programa ===\n");
     //liberar memória usada ao decorrer do programa, talvez
+    if (grafo != NULL) freeGrafo(grafo);
 }
 
 void printMenu()

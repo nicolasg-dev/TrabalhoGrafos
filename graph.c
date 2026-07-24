@@ -3,6 +3,33 @@
 #include <ctype.h>
 #include "graph.h"
 
+void freeGrafo(Grafo* g)
+{
+    if (g == NULL) return;
+    No* aux = NULL;
+    No* ant = NULL;
+
+    for (int i = 0; i < g->V; i ++)
+    {
+        if (g->lista[i] != NULL)
+        {
+            aux = g->lista[i];
+            ant = NULL;
+            while (aux != NULL)
+            {
+                ant = aux;
+                aux = aux->prox;
+                free(ant);
+            }
+        }
+    }
+    for (int i = 0; i < g->V; i ++)
+    {
+        free(g->lista[i]);
+    }
+    free(g);
+}
+
 No *criarNo(int destino, int peso) {
     No *novo=(No *)malloc(sizeof(No));
     if(novo == NULL){
@@ -12,6 +39,7 @@ No *criarNo(int destino, int peso) {
     novo->destino = destino;
     novo->peso = peso;
     novo->prox = NULL;
+    novo->pai = NULL;
     return novo;
 }
 
@@ -20,6 +48,7 @@ void adicionarArestaOrdenado(Grafo *g, int origem, int destino, int peso) {
     if(g->lista[origem] == NULL || destino < g->lista[origem]->destino){
         novo->prox = g->lista[origem];
         g->lista[origem] = novo;
+        novo->pai = g->lista[origem];
     }
     else {
         No *atual = g->lista[origem];
@@ -28,9 +57,29 @@ void adicionarArestaOrdenado(Grafo *g, int origem, int destino, int peso) {
         }
         novo->prox = atual->prox;
         atual->prox = novo;
+        novo->pai = atual;
     }
     g->A++;
 }
+
+/*void adicionarArestaNDir(Grafo *g, int origem, int destino, int peso) {
+    No *novo = criarNo(destino, peso);
+    if(g->lista[origem] == NULL || destino < g->lista[origem]->destino){
+        novo->prox = g->lista[origem];
+        g->lista[origem] = novo;
+        g->lista[destino] = g->lista[origem];
+    }
+    else {
+        No *atual = g->lista[origem];
+        while (atual->prox != NULL && atual->prox->destino < destino) {
+            atual = atual->prox;
+        }
+        novo->prox = atual->prox;
+        atual->prox = novo;
+        g->lista[destino] = atual;
+    }
+    g->A++;
+}*/
 
 Grafo *criarGrafo(int quantVertices) {
     Grafo *g = (Grafo *)malloc(sizeof(Grafo));
