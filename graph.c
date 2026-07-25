@@ -23,10 +23,6 @@ void freeGrafo(Grafo* g)
             }
         }
     }
-    for (int i = 0; i < g->V; i ++)
-    {
-        free(g->lista[i]);
-    }
     free(g);
 }
 

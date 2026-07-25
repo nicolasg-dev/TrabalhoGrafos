@@ -84,7 +84,7 @@ void caminhoCritico(Grafo *g, int duracoes[]) {
     int n = g->V;
     TarefaCPM t[n];
 
-    // Inicialização    
+    // Inicialização
     for (int i = 0; i < n; i++) {
         t[i].duracao = duracoes[i];
         t[i].IC = 0;
@@ -141,8 +141,6 @@ void caminhoCritico(Grafo *g, int duracoes[]) {
         }
     }
 
-    freeGrafo(reverso);
-
     // 3. Exibição da Tabela
     printf("\n     -METODO DO CAMINHO CRITICO-\n");
     printf("Tarefa / Duracao / IC  /  TC  / IT  / TT  / Folga / Critica\n");
@@ -152,6 +150,7 @@ void caminhoCritico(Grafo *g, int duracoes[]) {
                (t[i].folga == 0) ? "SIM ***" : "Nao");
     }
     printf("\nDuracao Total do Projeto: %d unidades de tempo\n", duracaoTotal);
+    freeGrafo(reverso);
 }
 
 void DFS(Grafo *g, int v, int visitado[], Pilha* p)

@@ -160,7 +160,7 @@ void Menu()
         Menu();
         break;
 
-    case 12:
+    case 12: // Só com grafos direcionados
         if (grafo == NULL)
         {
             printf("\nVocê ainda não carregou nenhum arquivo.\n");
