@@ -48,7 +48,6 @@ void adicionarArestaOrdenado(Grafo *g, int origem, int destino, int peso) {
     if(g->lista[origem] == NULL || destino < g->lista[origem]->destino){
         novo->prox = g->lista[origem];
         g->lista[origem] = novo;
-        novo->pai = g->lista[origem];
     }
     else {
         No *atual = g->lista[origem];
@@ -57,7 +56,23 @@ void adicionarArestaOrdenado(Grafo *g, int origem, int destino, int peso) {
         }
         novo->prox = atual->prox;
         atual->prox = novo;
-        novo->pai = atual;
+    }
+    g->A++;
+}
+
+void grafoTransposto(Grafo *g, int destino, int origem, int peso) {
+    No *novo = criarNo(destino, peso);
+    if(g->lista[origem] == NULL || destino < g->lista[origem]->destino){
+        novo->prox = g->lista[origem];
+        g->lista[origem] = novo;
+    }
+    else {
+        No *atual = g->lista[origem];
+        while (atual->prox != NULL && atual->prox->destino < destino) {
+            atual = atual->prox;
+        }
+        novo->prox = atual->prox;
+        atual->prox = novo;
     }
     g->A++;
 }
@@ -194,7 +209,29 @@ Grafo *lerArquivo(char *nome, int dir){
         return g; // faço o teste para verificar se a quantidade de arestas informadas no arquivo esta de acordo com a quantidade de arquivos do grafo e se nao for
     } // o caso deu algum erro na leitura
     printf("Erro na leitura dos dados!\n");
+}
 
+
+Grafo *lerArquivoTransposto(char *nome){
+    FILE *arquivo = fopen(nome, "r");
+    if(arquivo == NULL){
+        printf("\nErro ao abrir o arquivo!\n");
+        return NULL;
+    }
+    int Vertices, Arestas, Origem, Destino, Peso;
+    fscanf(arquivo,"%d %d", &Vertices, &Arestas); //le os primeiros dois inteiros do arquivo para saber a quantidade de vertices e arestas
+    Grafo *g = criarGrafo(Vertices);
+
+    while(fscanf(arquivo, "%d %d %d", &Origem, &Destino, &Peso) == 3)
+    {
+        grafoTransposto(g, Origem, Destino, Peso);
+    }
+
+    fclose(arquivo);
+    if(g->A == Arestas){
+        return g; // faço o teste para verificar se a quantidade de arestas informadas no arquivo esta de acordo com a quantidade de arquivos do grafo e se nao for
+    } // o caso deu algum erro na leitura
+    printf("Erro na leitura dos dados!\n");
 }
 
 void removeVertice(Grafo *g, int alvo)
@@ -239,57 +276,6 @@ void mostrarGrafo(Grafo* g)
         }
         printf("\n");
     }
-}
-
-void DFS(Grafo *g, int v, int visitado[])
-{
-    visitado[v] = 1;
-    printf("%d\n", v);
-    No* aux = g->lista[v];
-
-    while (aux != NULL)
-    {
-        if (!visitado[aux->destino]) // se a cor for branco
-        {
-            DFS(g, aux->destino, visitado);
-        }
-        aux = aux->prox;
-    }
-}
-
-void BFS(Grafo *g, int origem) {
-    int fila[100];
-    int inicio = 0;
-    int fim = 0;
-    int visitado[100] = {0};
-    fila[fim++] = origem;
-    visitado[origem] = 1;
-    while (inicio < fim) {
-        int v = fila[inicio++];
-        printf("%d ", v);
-        No *aux = g->lista[v];
-        while (aux) {
-            if (!visitado[ aux->destino ]) {
-                visitado[ aux->destino ] = 1;
-                fila[fim++] = aux->destino;
-            }
-            aux = aux->prox;
-        }
-    }
-}
-
-void topoDFS(Grafo *g, int v, int visitado[], int pilha[], int *topo) {
-    visitado[v] = 1;
-    No *aux = g->lista[v];
-
-    while (aux) {
-        if (!visitado[aux->destino]) {
-            topoDFS(g, aux->destino, visitado, pilha, topo);
-        }
-        aux = aux->prox;
-    }
-
-    pilha[(*topo)++] = v;
 }
 
 Pilha* criaPilha ()

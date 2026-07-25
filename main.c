@@ -5,6 +5,8 @@
 #include "graph.h"
 
 Grafo* grafo = NULL;
+Grafo* grafo2 = NULL;
+
 
 void encerra()
 {
@@ -25,6 +27,10 @@ void printMenu()
     printf("7. Menor Caminho (Dijkstra)\n");
     printf("8. Estatísticas do grafo\n");
     printf("9. Sair\n");
+    printf("--- EXTRAS ---\n");
+    printf("10. Detecção de Ciclos (DFS)\n");
+    printf("11. Componentes Fortemente Conexos (Kosaraju/Tarjan)\n");
+    printf("12. Caminho Crítico (maior distância)\n");
 
 }
 
@@ -58,6 +64,7 @@ void Menu()
 
             case 1:
             grafo = lerArquivo(nome, 1);
+            grafo2 = lerArquivoTransposto(nome);
             break;
 
             default:
@@ -71,13 +78,13 @@ void Menu()
 
     case 2:
         printf("=== Mostrar grafo (lista de adjacencia) ===\n");
-        if (grafo == NULL)
+        if (grafo2 == NULL)
         {
             printf("\nVocê ainda não carregou nenhum arquivo.\n");
             getchar();
         } else
         {
-            mostrarGrafo(grafo);
+            mostrarGrafo(grafo2);
             getchar();
         }
 
@@ -109,8 +116,25 @@ void Menu()
         break;
 
     case 7:
-        printf("=== Menor Caminho (Dijkstra) ===\n");
-        //chama função desejada
+        if (grafo == NULL)
+        {
+            printf("\nVocê ainda não carregou nenhum arquivo.\n");
+            getchar();
+        } else
+        {
+            int origem, destino;
+            printf("=== Menor Caminho (Dijkstra) ===\n");
+            printf("\nDigite a origem do algoritmo (vértice de origem)\n");
+
+            scanf("%d", &origem);
+
+            printf("\nDigite o destino do algoritmo (vértice de destino)\n");
+
+            scanf("%d", &destino);
+            dijkstra(grafo, origem, destino);
+            getchar();
+        }
+
         Menu();
         break;
 
@@ -123,6 +147,43 @@ void Menu()
     case 9:
         encerra();
         return;
+
+    case 10:
+        printf("=== Deteccao de Ciclos (DFS) ===\n");
+        //chama função desejada
+        Menu();
+        break;
+
+    case 11:
+        printf("=== Componentes Fortemente Conexos (Kosaraju/Tarjan) ===\n");
+        //chama função desejada
+        Menu();
+        break;
+
+    case 12:
+        if (grafo == NULL)
+        {
+            printf("\nVocê ainda não carregou nenhum arquivo.\n");
+            getchar();
+        } else
+        {
+            printf("=== Caminho Critico (maior distancia) ===\n");
+
+            int *duracoes = (int*) malloc(grafo->V * sizeof(int));
+
+            printf("--- Digite a duracao de cada tarefa ---\n");
+            for (int i = 0; i < grafo->V; i++) {
+                printf("Duracao da Tarefa V%d: ", i);
+                scanf("%d", &duracoes[i]);
+            }
+
+            caminhoCritico(grafo, duracoes);
+
+            free(duracoes);
+            getchar();
+        }
+        Menu();
+        break;
 
     default:
         printf("Opcao invalida.\n");
