@@ -62,34 +62,35 @@ void adicionarArestaOrdenado(Grafo *g, int origem, int destino, int peso) {
     g->A++;
 }
 
-/*Grafo* adicionarArestaNDir(Grafo *g) {
-    if (g == NULL) return;
-    No* aux = NULL;
-    No* ant = NULL;
-    No* novo = malloc(sizeof(No));
-
-
-    Pilha* p = criaPilha();
-
-    for (int i = 0; i < g->V; i ++)
-    {
-        aux = g->lista[i];
-
-        while (aux != NULL)
-        {
-            if (achaPilha(p, aux) != 1)
-                p = addPilha(p, aux);
-            aux = aux->prox;
-            if (achaPilha(p, aux) == 1)
-            {
-                novo->prox = g->lista[i];
-                g->lista[i] = novo;
-                removePilha(p);
-            }
-        }
+void adicionarArestaOrdenadoNDir(Grafo *g, int origem, int destino, int peso) {
+    No *novo = criarNo(destino, peso);
+    if(g->lista[origem] == NULL || destino < g->lista[origem]->destino){
+        novo->prox = g->lista[origem];
+        g->lista[origem] = novo;
     }
-    return g;
-}*/
+    else {
+        No *atual = g->lista[origem];
+        while (atual->prox != NULL && atual->prox->destino < destino) {
+            atual = atual->prox;
+        }
+        novo->prox = atual->prox;
+        atual->prox = novo;
+    }
+    No *segundoNo = criarNo(origem, peso);
+    if(g->lista[destino] == NULL || origem < g->lista[destino]->destino){
+        segundoNo->prox = g->lista[destino];
+        g->lista[destino] = segundoNo;
+    }
+    else{
+        No *atual2 = g->lista[destino];
+        while(atual2->prox != NULL && atual2->prox->destino < origem){
+            atual2 = atual2->prox;
+        }
+        segundoNo->prox = atual2->prox;
+        atual2->prox = segundoNo;
+    }
+    g->A++;
+}
 
 Grafo *criarGrafo(int quantVertices) {
     Grafo *g = (Grafo *)malloc(sizeof(Grafo));
@@ -166,7 +167,7 @@ Grafo* leGrafo(char str[]) // key = 1 -> direcionado; 0 -> n direcionado
 }
 */
 
-Grafo *lerArquivo(char *nome){
+Grafo *lerArquivo(char *nome, int dir){
     FILE *arquivo = fopen(nome, "r");
     if(arquivo == NULL){
         printf("\nErro ao abrir o arquivo!\n");
@@ -175,9 +176,19 @@ Grafo *lerArquivo(char *nome){
     int Vertices, Arestas, Origem, Destino, Peso;
     fscanf(arquivo,"%d %d", &Vertices, &Arestas); //le os primeiros dois inteiros do arquivo para saber a quantidade de vertices e arestas
     Grafo *g = criarGrafo(Vertices);
-    while(fscanf(arquivo, "%d %d %d", &Origem, &Destino, &Peso) == 3){ //coleta os dados subsequentes de 3 em tres para adicionar as arestas
-        adicionarArestaOrdenado(g, Origem, Destino, Peso); // fiz esse while de == 3 pois o retorno do fscanf é a quantidade de dados que ele le e enquanto ele ler
-    } // 3 arquivos o programa da certo
+
+    if (dir == 0)
+    {
+        while(fscanf(arquivo, "%d %d %d", &Origem, &Destino, &Peso) == 3){ //coleta os dados subsequentes de 3 em tres para adicionar as arestas
+            adicionarArestaOrdenadoNDir(g, Origem, Destino, Peso); // fiz esse while de == 3 pois o retorno do fscanf é a quantidade de dados que ele le e enquanto ele ler
+        } // 3 arquivos o programa da certo
+    } else if (dir == 1)
+    {
+        while(fscanf(arquivo, "%d %d %d", &Origem, &Destino, &Peso) == 3){
+            adicionarArestaOrdenado(g, Origem, Destino, Peso);
+        }
+    }
+
     fclose(arquivo);
     if(g->A == Arestas){
         return g; // faço o teste para verificar se a quantidade de arestas informadas no arquivo esta de acordo com a quantidade de arquivos do grafo e se nao for

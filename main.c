@@ -41,12 +41,30 @@ void Menu()
     {
     case 1:
         char nome[100];
+        int dir = 0;
+
         printf("=== Carregar grafo de arquivo ===\n");
         printf("\nDigite o nome do arquivo: ");
         fgets(nome, 100, stdin);
         nome[strcspn(nome, "\n")] = '\0';
 
-        grafo = lerArquivo(nome);
+        printf("\nO grafo é direcionado (1) ou ñ direcionado (0)?\n");
+        scanf("%d", &dir);
+        switch(dir)
+        {
+            case 0:
+            grafo = lerArquivo(nome, 0);
+            break;
+
+            case 1:
+            grafo = lerArquivo(nome, 1);
+            break;
+
+            default:
+            printf("Entrada inválida!\n");
+            Menu();
+            break;
+        }
         //chama função desejada
         Menu();
         break;
