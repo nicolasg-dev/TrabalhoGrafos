@@ -5,7 +5,7 @@ Supondo que você já tenha as dependências da linguagem C instalada no seu sis
 
 Digite os comandos em sequência:
 
-### gcc main.c graph.c -o main
+### gcc main.c graph.c perc.c -o main
 
 ### ./main
 
