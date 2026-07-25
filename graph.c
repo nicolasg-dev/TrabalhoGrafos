@@ -62,23 +62,33 @@ void adicionarArestaOrdenado(Grafo *g, int origem, int destino, int peso) {
     g->A++;
 }
 
-/*void adicionarArestaNDir(Grafo *g, int origem, int destino, int peso) {
-    No *novo = criarNo(destino, peso);
-    if(g->lista[origem] == NULL || destino < g->lista[origem]->destino){
-        novo->prox = g->lista[origem];
-        g->lista[origem] = novo;
-        g->lista[destino] = g->lista[origem];
-    }
-    else {
-        No *atual = g->lista[origem];
-        while (atual->prox != NULL && atual->prox->destino < destino) {
-            atual = atual->prox;
+/*Grafo* adicionarArestaNDir(Grafo *g) {
+    if (g == NULL) return;
+    No* aux = NULL;
+    No* ant = NULL;
+    No* novo = malloc(sizeof(No));
+
+
+    Pilha* p = criaPilha();
+
+    for (int i = 0; i < g->V; i ++)
+    {
+        aux = g->lista[i];
+
+        while (aux != NULL)
+        {
+            if (achaPilha(p, aux) != 1)
+                p = addPilha(p, aux);
+            aux = aux->prox;
+            if (achaPilha(p, aux) == 1)
+            {
+                novo->prox = g->lista[i];
+                g->lista[i] = novo;
+                removePilha(p);
+            }
         }
-        novo->prox = atual->prox;
-        atual->prox = novo;
-        g->lista[destino] = atual;
     }
-    g->A++;
+    return g;
 }*/
 
 Grafo *criarGrafo(int quantVertices) {
@@ -213,7 +223,7 @@ void mostrarGrafo(Grafo* g)
         printf("V%d ->" , i);
         while (aux != NULL)
         {
-            printf("V%d (%d) ->", aux->destino, aux->peso);
+            printf(" V%d (%d) ->", aux->destino, aux->peso);
             aux = aux->prox;
         }
         printf("\n");

@@ -28,7 +28,7 @@ No* criarNo(int destino, int peso);
 Grafo* criarGrafo(int quantVertices);
 Grafo* lerArquivo(char *nome);
 void adicionarArestaOrdenado(Grafo *g, int origem, int destino, int peso);
-void adicionarArestaNDir(Grafo *g, int origem, int destino, int peso);
+Grafo* adicionarArestaNDir(Grafo *g);
 void removeVertice(Grafo *g, int alvo);
 void BFS(Grafo *g, int origem);
 void DFS(Grafo *g, int v, int visitado[]);

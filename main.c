@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h>
 #include "graph.h"
 
 Grafo* grafo = NULL;
@@ -39,11 +40,13 @@ void Menu()
     switch (num)
     {
     case 1:
-        /*char nome[100];
+        char nome[100];
         printf("=== Carregar grafo de arquivo ===\n");
         printf("\nDigite o nome do arquivo: ");
-        fgets(nome, 100, stdin);*/
-        grafo = lerArquivo("grafo1.txt");
+        fgets(nome, 100, stdin);
+        nome[strcspn(nome, "\n")] = '\0';
+
+        grafo = lerArquivo(nome);
         //chama função desejada
         Menu();
         break;
