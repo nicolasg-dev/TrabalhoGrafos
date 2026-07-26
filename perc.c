@@ -1,6 +1,3 @@
-//
-// Created by nicolas on 7/25/26.
-//
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -190,14 +187,24 @@ void DFSvisita(Grafo* g, int u, int visitado[], Pilha* p)
     p->topo = vu;
 }
 
-void Kosaraju(Grafo* g, Grafo* gT)
+void Kosaraju(Grafo* g)
 {
+    int n = g->V;
     int visitado[100];
     Pilha* p = criaPilha();
 
     DFS(g, 0, visitado, p);
 
+    Grafo *reverso = criarGrafo(n);
+    for (int u = 0; u < n; u++) {
+        No *aux = g->lista[u];
+        while (aux != NULL) {
+            adicionarArestaOrdenado(reverso, aux->destino, u, aux->peso); // Inverte u -> v para v -> u
+            aux = aux->prox;
+        }
+    }
 
+    DFS(reverso, 0, visitado, p);
 }
 
 void BFS(Grafo *g, int origem) {
