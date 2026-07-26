@@ -48,6 +48,11 @@ void Menu()
         int dir = 0;
 
         printf("=== Carregar grafo de arquivo ===\n");
+        printf("grafo1.txt (Grafo não-direcionado simples)\n");
+        printf("grafo2.txt (DAG para ordenação topológica)\n");
+        printf("grafo3.txt (Grafo com ciclo)\n");
+        printf("grafo4.txt (Grafo ponderado para Dijkstra)\n");
+        printf("grafo5.txt (Teste Kosaraju)\n");
         printf("\nDigite o nome do arquivo: ");
         fgets(nome, 100, stdin);
         nome[strcspn(nome, "\n")] = '\0';
@@ -197,8 +202,16 @@ void Menu()
         break;
 
     case 11: // Componentes fortemente conexos
-        printf("=== Componentes Fortemente Conexos (Kosaraju/Tarjan) ===\n");
-        //chama função desejada
+        if (grafo == NULL)
+        {
+            printf("\nVocê ainda não carregou nenhum arquivo.\n");
+            getchar();
+        } else
+        {
+            printf("=== Componentes Fortemente Conexos (Kosaraju) ===\n\n");
+            Kosaraju(grafo);
+            getchar();
+        }
         Menu();
         break;
 

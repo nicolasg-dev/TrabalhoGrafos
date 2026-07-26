@@ -19,7 +19,7 @@ typedef struct {
     int folga;
 } TarefaCPM; // Renato
 
-// 2. Busca em Profundidade (DFS)
+// 2. Busca em Profundidade (DFS)// Ambas dfs foram criadas de forma opaca pois serao usadas somente no graph.c
 void dfsIterativa(Grafo *gr, int ini, int *visitado, int *cont); // Ambas dfs foram criadas de forma opaca pois serao usadas somente no graph.c
 void dfsRecursiva(Grafo *gr, int ini, int *visitado, int *cont);
 
@@ -282,16 +282,73 @@ void dijkstra(Grafo *g, int origem, int destino) {
 
 // 7. 2. Componentes Fortemente Conexos
 // (Implementado por Nicolas)
+
+void DFSKosaraju(Grafo *gr, int ini, int *visitados) {               // Essa funcao eh somente para identificar os componentes conexos e identificar o tipo de busca que sera feita
+
+    if (visitados == NULL){
+        return;
+    }
+
+    for(int i = 0; i < gr->V; i++){                         // O for percorre todos os vertices
+        int verticeAtual = (i + ini) % gr->V;               // Começa pelo inicio
+        if(visitados[verticeAtual] == 0){
+            dfsRecursivaKosaraju(gr, verticeAtual, visitados);
+        }
+    }
+
+}
+
+void dfsRecursivaKosaraju(Grafo *gr, int ini, int *visitado) {
+    printf("%d ", ini);
+
+    visitado[ini] = 1;                          // Usado para marcar a ordem em que cada vertice sera visitado
+
+    No *aux = gr->lista[ini];                           // Usa a lista de adjacencia para percorrer desde o inicio criando um auxiliar
+    while(aux != NULL) {
+        if(visitado[aux->destino] == 0){                // Se nao foi visitado
+            dfsRecursivaKosaraju(gr, aux->destino, visitado); // Chama a funcao recursivamente
+        }
+        aux = aux->prox;
+    }
+    printf("\n");
+}
+
+void DFSWithVertexPriorities(Grafo *gr, int ini, int *visitado, Pilha* p) {
+    visitado[ini] = 1;                          // Usado para marcar a ordem em que cada vertice sera visitado
+
+    No *aux = gr->lista[ini];                           // Usa a lista de adjacencia para percorrer desde o inicio criando um auxiliar
+    while(aux != NULL) {
+        if(visitado[aux->destino] == 0){                // Se nao foi visitado
+            DFSWithVertexPriorities(gr, aux->destino, visitado, p); // Chama a funcao recursivamente
+        }
+        aux = aux->prox;
+    }
+    addPilha(p, ini);
+}
+
 void Kosaraju(Grafo* g)
 {
-    int n = g->V;
-    int visitado[100];
     Pilha* p = criaPilha();
+    int *visitados = (int*) calloc(g->V, sizeof(int));
+    if (visitados == NULL){
+        return;
+    }
 
-    //DFS(g, 0, visitado, p);
+    int n = 0;
+    int quantV = g->V;
 
-    Grafo *reverso = criarGrafo(n);
-    for (int u = 0; u < n; u++) {
+    for(int i = 0; i < g->V; i++){                         // O for percorre todos os vertices
+        int verticeAtual = i % g->V;               // Começa pelo inicio
+        if(visitados[verticeAtual] == 0){
+            DFSWithVertexPriorities(g, verticeAtual, visitados, p);
+        }
+    }
+    free(visitados);
+
+    visitados = (int*) calloc(g->V, sizeof(int));
+
+    Grafo *reverso = criarGrafo(quantV);
+    for (int u = 0; u < quantV ; u++) {
         No *aux = g->lista[u];
         while (aux != NULL) {
             adicionarArestaOrdenado(reverso, aux->destino, u, aux->peso); // Inverte u -> v para v -> u
@@ -299,7 +356,18 @@ void Kosaraju(Grafo* g)
         }
     }
 
-    //(reverso, 0, visitado, p);
+    while (p->topo != NULL)
+    {
+        n = popPilha(p);
+        if (visitados[n] == 0)
+        {
+            DFSKosaraju(reverso, n, visitados);
+            printf("\n");
+        }
+    }
+    free(visitados);
+    freeGrafo(reverso);
+    freePilha(p);
 }
 
 // 7. 3. Caminho Crítico
@@ -381,78 +449,3 @@ void caminhoCritico(Grafo *g, int duracoes[]) {
 
 // 7. 4. Grafo com 1000+ vértices
 // (Implementado por Pedro Lucas)
-
-
-
-
-/*void BFS(Grafo *g, int origem) {
-    int fila[100];
-    int inicio = 0;
-    int fim = 0;
-    int visitado[100] = {0};
-    fila[fim++] = origem;
-    visitado[origem] = 1;
-    while (inicio < fim) {
-        int v = fila[inicio++];
-        printf("%d ", v);
-        No *aux = g->lista[v];
-        while (aux) {
-            if (!visitado[ aux->destino ]) {
-                visitado[ aux->destino ] = 1;
-                fila[fim++] = aux->destino;
-            }
-            aux = aux->prox;
-        }
-    }
-}
-
-void topoDFS(Grafo *g, int v, int visitado[], int pilha[], int *topo) {
-    visitado[v] = 1;
-    No *aux = g->lista[v];
-
-    while (aux) {
-        if (!visitado[aux->destino]) {
-            topoDFS(g, aux->destino, visitado, pilha, topo);
-        }
-        aux = aux->prox;
-    }
-
-    pilha[(*topo)++] = v;
-}*/
-
-/*void DFS(Grafo *g, int v, int visitado[], Pilha* p)
-{
-    visitado[v] = 1;
-    printf("%d\n", v);
-    No* aux = g->lista[v];
-
-    while (aux != NULL)
-    {
-        if (!visitado[aux->destino]) // se a cor for branco
-        {
-            DFSvisita(g, aux->destino, visitado, p);
-        }
-        aux = aux->prox;
-    }
-}
-
-void DFSvisita(Grafo* g, int u, int visitado[], Pilha* p)
-{
-    No* vu = g->lista[u];
-    tempo = tempo + 1;
-    No* aux = g->lista[u];
-    aux->d = tempo;
-
-    while (aux != NULL)
-    {
-        if (!visitado[aux->destino])
-        {
-            aux->pai = vu;
-            DFSvisita(g, aux->destino, visitado, p);
-        }
-    }
-    visitado[u] = 1;
-    tempo++;
-    vu->f = tempo;
-    p->topo = vu;
-}*/

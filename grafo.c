@@ -45,7 +45,7 @@ Grafo *lerArquivo(char *nome, int dir){
     {
         while(fscanf(arquivo, "%d %d %d", &Origem, &Destino, &Peso) == 3){
             adicionarArestaOrdenado(g, Origem, Destino, Peso);
-        }
+        } // traspoem o grafo
     }
 
     fclose(arquivo);
@@ -190,15 +190,29 @@ Pilha* criaPilha (){
 
 }
 
-No* extractMin (Pilha* pi){
-    No* aux;
-    No* menor = NULL;
+
+int popPilha(Pilha* pi){
+    if (pi->topo == NULL)
+    {
+        return -1;
+    }
+    Num* aux = pi->topo;
+    int n = aux->valor;
+    pi->topo = pi->topo->prox;
+
+    free(aux);
+    return n;
+}
+
+Num* extractMin (Pilha* pi){
+    Num* aux;
+    Num* menor = NULL;
     if (pi->topo == NULL) return NULL;
     {
         aux = pi->topo;
         while (aux != NULL)
         {
-            if (aux->chave < aux->prox->chave)
+            if (aux->valor < aux->prox->valor)
             {
                 menor = aux;
             }
@@ -208,9 +222,13 @@ No* extractMin (Pilha* pi){
     return menor;
 }
 
-void addPilha(Pilha* pi, No* novo){
+void addPilha(Pilha* pi, int n){
+    Num* novo = (Num*) malloc(sizeof(Num));
+    novo->valor = n;
+
     if (pi->topo == NULL)
     {
+        novo->prox = NULL;
         pi->topo = novo;
     } else
     {
@@ -219,8 +237,8 @@ void addPilha(Pilha* pi, No* novo){
     }
 }
 
-void removePilha (Pilha* pi){
-    No* aux = pi->topo;
+void freePilha (Pilha* pi){
+    Num* aux = pi->topo;
 
     if (pi->topo == NULL)
     {
@@ -232,8 +250,21 @@ void removePilha (Pilha* pi){
     }
 }
 
-int achaPilha(Pilha* pi, No* sugeito){
-    No* aux;
+void printPilha (Pilha* pi){
+    Num* aux = pi->topo;
+
+    if (pi->topo == NULL)
+    {
+        return;
+    } else
+    {
+        pi->topo = pi->topo->prox;
+        printf("%d\n", pi->topo->valor);
+    }
+}
+
+int achaPilha(Pilha* pi, Num* sugeito){
+    Num* aux;
 
     if (pi->topo == NULL) return -1;
     {

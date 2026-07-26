@@ -15,8 +15,14 @@ typedef struct grafo {
     No **lista;
 } Grafo;
 
+typedef struct num
+{
+    int valor;
+    struct num* prox;
+} Num;
+
 typedef struct pilha {
-    No *topo;
+    Num *topo;
 } Pilha;
 
 // 1. Leitura e Construção do Grafo (e extras)
@@ -52,6 +58,9 @@ void dijkstra(Grafo *g, int origem, int destino);
 // 7. 2. Componentes Fortemente Conexos
 // (Implementado por Nicolas)
 void Kosaraju(Grafo *g);
+void DFSKosaraju(Grafo *gr, int ini, int *visitados);
+void DFSWithVertexPriorities(Grafo *gr, int ini, int *visitado, Pilha* p);
+void dfsRecursivaKosaraju(Grafo *gr, int ini, int *visitado);
 
 // 7. 3. Caminho Crítico
 // (Implementado por Renato)
@@ -62,9 +71,11 @@ void caminhoCritico(Grafo *g, int duracoes[]);
 
 // 8. Funcoes Pilha
 Pilha* criaPilha(void);
-No* extractMin(Pilha *pi);
-void addPilha(Pilha *pi, No *novo);
-void removePilha(Pilha *pi);
-int achaPilha(Pilha *pi, No *sugeito);
+int popPilha(Pilha* pi);
+Num* extractMin(Pilha *pi);
+void addPilha(Pilha *pi, int n);
+void freePilha(Pilha *pi);
+int achaPilha(Pilha *pi, Num *sugeito);
+void printPilha (Pilha* pi);
 
 #endif // GRAPH_H
