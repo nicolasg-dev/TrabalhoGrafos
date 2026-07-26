@@ -2,11 +2,9 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-#include "graph.h"
+#include "grafo.h"
 
 Grafo* grafo = NULL;
-Grafo* grafo2 = NULL;
-
 
 void encerra()
 {
@@ -45,7 +43,7 @@ void Menu()
 
     switch (num)
     {
-    case 1:
+    case 1: // Carregar grafo de arquivo
         char nome[100];
         int dir = 0;
 
@@ -64,7 +62,6 @@ void Menu()
 
             case 1:
             grafo = lerArquivo(nome, 1);
-            grafo2 = lerArquivoTransposto(nome);
             break;
 
             default:
@@ -76,46 +73,91 @@ void Menu()
         Menu();
         break;
 
-    case 2:
+    case 2: // Mostrar grafo
         printf("=== Mostrar grafo (lista de adjacencia) ===\n");
-        if (grafo2 == NULL)
+        if (grafo == NULL)
         {
             printf("\nVocê ainda não carregou nenhum arquivo.\n");
             getchar();
         } else
         {
-            mostrarGrafo(grafo2);
+            mostrarGrafo(grafo);
             getchar();
         }
 
         Menu();
         break;
 
-    case 3:
-        printf("=== Busca em Profundidade (DFS) ===\n");
-        //chama função desejada
+    case 3: // Busca em profundidade
+        if (grafo == NULL)
+        {
+            printf("\nVocê ainda não carregou nenhum arquivo.\n");
+            getchar();
+        } else
+        {
+            printf("=== Busca em Profundidade (DFS) ===\n");
+            char tipo[100];
+            int ini;
+            printf("\nDigite qual DFS você deseja (iterativa) / (recursiva)\n");
+            fgets(tipo, 100, stdin);
+            tipo[strcspn(tipo, "\n")] = '\0';
+
+            printf("\nVamos começar por qual vértice ?\n");
+            scanf("%d", &ini);
+            DFS(grafo, tipo, ini);
+
+            getchar();
+        }
         Menu();
         break;
 
-    case 4:
-        printf("=== Busca em Largura (BFS) ===\n");
-        //chama função desejada
+    case 4: // Busca em largura
+        if (grafo == NULL)
+        {
+            printf("\nVocê ainda não carregou nenhum arquivo.\n");
+            getchar();
+        } else
+        {
+            printf("=== Busca em Largura (BFS) ===\n");
+            int distancia[grafo->V];
+            int visitado[grafo->V];
+            int ini;
+
+            printf("\nVamos começar por qual vértice ?\n");
+            scanf("%d", &ini);
+            BFS(grafo, ini, visitado, distancia);
+            getchar();
+        }
         Menu();
         break;
 
-    case 5:
+    case 5: // Ordenação topológica
         printf("=== Ordenacao Topologica ===\n");
         //chama função desejada
         Menu();
         break;
 
-    case 6:
-        printf("=== Arvore Geradora Minima (Prim) ===\n");
-        //chama função desejada
+    case 6: // Árvore geradora mínima
+
+        if (grafo == NULL)
+        {
+            printf("\nVocê ainda não carregou nenhum arquivo.\n");
+            getchar();
+        } else
+        {
+            printf("=== Arvore Geradora Minima (Prim) ===\n");
+            int ini;
+            int pais[grafo->V];
+
+            printf("\nVamos começar por qual vértice ?\n");
+            scanf("%d", &ini);
+            prim(grafo, ini, pais);
+            getchar();
+        }
         Menu();
         break;
 
-    case 7:
+    case 7: // Menor caminho
         if (grafo == NULL)
         {
             printf("\nVocê ainda não carregou nenhum arquivo.\n");
@@ -138,29 +180,29 @@ void Menu()
         Menu();
         break;
 
-    case 8:
+    case 8: // Estatísticas do grafo
         printf("=== Estatisticas do grafo ===\n");
         //chama função desejada
         Menu();
         break;
 
-    case 9:
+    case 9: // Sair
         encerra();
         return;
 
-    case 10:
+    case 10: // Detecção de ciclos
         printf("=== Deteccao de Ciclos (DFS) ===\n");
         //chama função desejada
         Menu();
         break;
 
-    case 11:
+    case 11: // Componentes fortemente conexos
         printf("=== Componentes Fortemente Conexos (Kosaraju/Tarjan) ===\n");
         //chama função desejada
         Menu();
         break;
 
-    case 12: // Só com grafos direcionados
+    case 12: // Caminho crítico (só com grafos direcionados)
         if (grafo == NULL)
         {
             printf("\nVocê ainda não carregou nenhum arquivo.\n");
