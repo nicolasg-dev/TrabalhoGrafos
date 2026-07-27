@@ -483,7 +483,7 @@ void Kosaraju(Grafo* g)
 }
 
 // 7. 3. Caminho Crítico
-// (não implementado)
+// Implementado por Renato
 void caminhoCritico(Grafo *g, int duracoes[]) {
     if (g == NULL) return;
 
