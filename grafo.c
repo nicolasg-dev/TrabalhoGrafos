@@ -26,7 +26,7 @@ void Estatisticas(Grafo* g)
     if (g == NULL) return;
     int V = g->V;
     int A = g->A;
-    int var = 0;
+    int var = 0; // Variavel usada como booleana para verificar se o grafo eh conexo
 
     float densidade = 0;
 
@@ -35,7 +35,7 @@ void Estatisticas(Grafo* g)
     int conexo = 0;
     No* aux = NULL;
 
-    for (int i = 0; i < V; i++)
+    for (int i = 0; i < V; i++) //Percorre a lista de adjacência
     {
         aux = g->lista[i];
         while (aux !=NULL)
@@ -87,14 +87,14 @@ Grafo *criarGrafo(int quantVertices) {
     }
     g->V = quantVertices;
     g->A = 0;
-    g->lista = (No **)malloc(quantVertices * sizeof(No *));
+    g->lista = (No **)malloc(quantVertices * sizeof(No *)); //Aloca a quantidade necessária de memória para a lista de adjacência
     if(g->lista == NULL) {
         printf("Memoria insuficiente!\n");
         free(g);
         exit(99);
     }
     for(int i = 0; i < quantVertices; i++) {
-        g->lista[i] = NULL;
+        g->lista[i] = NULL; // Garante que todos os vertices iniciais da lista apontem para NULO
     }
     return g;
 }
