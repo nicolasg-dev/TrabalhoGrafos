@@ -19,6 +19,118 @@ typedef struct {
     int folga;
 } TarefaCPM; // Renato
 
+
+void topoDFS(Grafo *gr, int v, int *visitado, int *pilha, int *topo)
+{
+    visitado[v] = 1;
+
+    No *aux = gr->lista[v];
+
+    while(aux != NULL)
+    {
+        if(!visitado[aux->destino])
+        {
+            topoDFS(gr, aux->destino, visitado, pilha, topo);
+        }
+
+        aux = aux->prox;
+    }
+
+    pilha[*topo] = v;
+    (*topo)++;
+}
+
+void ordenacaoTopologica(Grafo *gr)
+{
+    if(temCiclo(gr))
+    {
+        printf("O grafo possui ciclo.\n");
+        printf("Nao existe ordenacao topologica.\n");
+        return;
+    }
+
+    int *visitado = calloc(gr->V, sizeof(int));
+    int *pilha = malloc(gr->V * sizeof(int));
+
+    int topo = 0;
+
+    for(int i = 0; i < gr->V; i++)
+    {
+        if(!visitado[i])
+        {
+            topoDFS(gr, i, visitado, pilha, &topo);
+        }
+    }
+
+    printf("=== Ordenacao Topologica ===\n");
+
+    for(int i = topo - 1; i >= 0; i--)
+    {
+        printf("%d ", pilha[i]);
+    }
+
+    printf("\n");
+
+    free(visitado);
+    free(pilha);
+}
+
+
+bool dfsCiclo(Grafo *gr, int v, int *cor)
+{
+    cor[v] = 1; // cinza (visitando)
+
+    No *aux = gr->lista[v];
+
+    while(aux != NULL)
+    {
+        if(cor[aux->destino] == 1)
+        {
+            return true;
+        }
+
+        if(cor[aux->destino] == 0)
+        {
+            if(dfsCiclo(gr, aux->destino, cor))
+            {
+                return true;
+            }
+        }
+
+        aux = aux->prox;
+    }
+
+    cor[v] = 2; // preto (finalizado)
+
+    return false;
+}
+
+bool temCiclo(Grafo *gr)
+{
+    int *cor = calloc(gr->V, sizeof(int));
+
+    if(cor == NULL)
+    {
+        return false;
+    }
+
+    for(int i = 0; i < gr->V; i++)
+    {
+        if(cor[i] == 0)
+        {
+            if(dfsCiclo(gr, i, cor))
+            {
+                free(cor);
+                return true;
+            }
+        }
+    }
+
+    free(cor);
+
+    return false;
+}
+
 // 2. Busca em Profundidade (DFS)// Ambas dfs foram criadas de forma opaca pois serao usadas somente no graph.c
 void dfsIterativa(Grafo *gr, int ini, int *visitado, int *cont); // Ambas dfs foram criadas de forma opaca pois serao usadas somente no graph.c
 void dfsRecursiva(Grafo *gr, int ini, int *visitado, int *cont);
@@ -283,7 +395,7 @@ void dijkstra(Grafo *g, int origem, int destino) {
 // 7. 2. Componentes Fortemente Conexos
 // (Implementado por Nicolas)
 
-void DFSKosaraju(Grafo *gr, int ini, int *visitados) {               // Essa funcao eh somente para identificar os componentes conexos e identificar o tipo de busca que sera feita
+void DFSKosaraju(Grafo *gr, int ini, int *visitados) {
 
     if (visitados == NULL){
         return;

@@ -5,7 +5,7 @@
 #include "grafo.h"
 
 Grafo* grafo = NULL;
-
+void menuExtra();
 void encerra()
 {
     printf("=== Encerrando o programa ===\n");
@@ -24,13 +24,21 @@ void printMenu()
     printf("6. Árvore Geradora Mínima (Prim)\n");
     printf("7. Menor Caminho (Dijkstra)\n");
     printf("8. Estatísticas do grafo\n");
-    printf("9. Sair\n");
-    printf("--- EXTRAS ---\n");
-    printf("10. Detecção de Ciclos (DFS)\n");
-    printf("11. Componentes Fortemente Conexos (Kosaraju/Tarjan)\n");
-    printf("12. Caminho Crítico (maior distância)\n");
-
+    printf("9. EXTRAS\n");
+    printf("10. Sair\n");
 }
+
+void printExtra()
+{
+    printf("=== SISTEMA DE GRAFOS ===\n");
+    printf("1. Detecção de Ciclos (DFS)\n");
+    printf("2. Componentes Fortemente Conexos (Kosaraju/Tarjan)\n");
+    printf("3. Caminho Crítico (maior distância)\n");
+    printf("4. Testes dos 1000s vertices.\n");
+    printf("5. Retornar para o menu principal.\n");
+    printf("6. Sair\n");
+}
+
 
 void Menu()
 {
@@ -63,10 +71,12 @@ void Menu()
         {
             case 0:
             grafo = lerArquivo(nome, 0);
+            grafo->direcionado = 0;
             break;
 
             case 1:
             grafo = lerArquivo(nome, 1);
+            grafo->direcionado = 1;
             break;
 
             default:
@@ -137,8 +147,15 @@ void Menu()
         break;
 
     case 5: // Ordenação topológica
-        printf("=== Ordenacao Topologica ===\n");
-        //chama função desejada
+        if (grafo == NULL)
+        {
+            printf("\nVocê ainda não carregou nenhum arquivo.\n");
+            getchar();
+        } else
+        {
+            ordenacaoTopologica(grafo);
+            getchar();
+        }
         Menu();
         break;
 
@@ -186,22 +203,66 @@ void Menu()
         break;
 
     case 8: // Estatísticas do grafo
-        printf("=== Estatisticas do grafo ===\n");
-        //chama função desejada
+        if (grafo == NULL)
+        {
+            printf("\nVocê ainda não carregou nenhum arquivo.\n");
+            getchar();
+        } else
+        {
+            printf("=== Estatisticas do grafo ===\n");
+            Estatisticas(grafo);
+            getchar();
+        }
         Menu();
         break;
 
-    case 9: // Sair
+    case 9:
+        menuExtra();
+        break;
+
+    case 10: // Sair
         encerra();
         return;
 
-    case 10: // Detecção de ciclos
+    default:
+        printf("Opcao invalida.\n");
+        Menu();
+        break;
+    }
+}
+
+void menuExtra()
+{
+    printExtra();
+
+    int num = 0;
+
+    scanf("%d", &num);
+    getchar();
+
+    switch (num)
+    {
+    case 1: // Detecção de ciclos
         printf("=== Deteccao de Ciclos (DFS) ===\n");
-        //chama função desejada
+        if (grafo == NULL)
+        {
+            printf("\nVocê ainda não carregou nenhum arquivo.\n");
+            getchar();
+        } else
+        {
+            if (temCiclo(grafo))
+            {
+                printf("\nO grafo possui ciclos.\n\n");
+            } else
+            {
+                printf("\nO grafo ñ possui ciclos.\n\n");
+            }
+        }
+
         Menu();
         break;
 
-    case 11: // Componentes fortemente conexos
+    case 2: // Componentes fortemente conexos
         if (grafo == NULL)
         {
             printf("\nVocê ainda não carregou nenhum arquivo.\n");
@@ -215,7 +276,7 @@ void Menu()
         Menu();
         break;
 
-    case 12: // Caminho crítico (só com grafos direcionados)
+    case 3: // Caminho crítico (só com grafos direcionados)
         if (grafo == NULL)
         {
             printf("\nVocê ainda não carregou nenhum arquivo.\n");
@@ -239,6 +300,24 @@ void Menu()
         }
         Menu();
         break;
+
+    case 4: // Caminho crítico (só com grafos direcionados)
+        int d = 0;
+        printf("\nOs grafos sao direcionados (1) ou ñ direcionados (0)?\n");
+        scanf("%d", &d);
+        testeMilVertices(d);
+        getchar();
+
+        Menu();
+        break;
+
+    case 5: // Menu
+        Menu();
+        break;
+
+    case 6: // Sair
+        encerra();
+        return;
 
     default:
         printf("Opcao invalida.\n");

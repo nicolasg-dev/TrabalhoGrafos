@@ -1,5 +1,6 @@
 #ifndef GRAPH_H
 #define GRAPH_H
+#include <stdbool.h>
 
 typedef struct No {
     int destino;
@@ -12,6 +13,7 @@ typedef struct No {
 typedef struct grafo {
     int V;
     int A;
+    int direcionado;
     No **lista;
 } Grafo;
 
@@ -34,6 +36,8 @@ void adicionarArestaOrdenadoNDir(Grafo *g, int origem, int destino, int peso);
 void freeGrafo(Grafo* g);
 void mostrarGrafo(Grafo* g);
 void removeVertice(Grafo *g, int alvo);
+void Estatisticas(Grafo* g);
+void testeMilVertices(int dir);
 
 // 2. Busca em Profundidade (DFS)
 void DFS(Grafo *gr, char *tipoDFS, int ini);
@@ -42,7 +46,7 @@ void DFS(Grafo *gr, char *tipoDFS, int ini);
 void BFS(Grafo *gr, int ini, int *visitado, int *distancia);
 
 // 4. Ordenação Topológica
-// (não implementado)
+void ordenacaoTopologica(Grafo *gr);
 
 // 5. Árvore Geradora Mínima - Prim
 void prim(Grafo *gr, int orig, int *pai);
@@ -53,7 +57,8 @@ void dijkstra(Grafo *g, int origem, int destino);
 
 // 7. Desafios Extras
 // 7. 1. Deteccao de Ciclos
-// (Implementado por Angelo)
+bool temCiclo(Grafo *gr);
+bool dfsCiclo(Grafo *gr, int v, int *cor);
 
 // 7. 2. Componentes Fortemente Conexos
 // (Implementado por Nicolas)

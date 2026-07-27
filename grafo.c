@@ -2,9 +2,82 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <time.h>
 #include "grafo.h"
 
 // 1. Leitura e Construção do Grafo (e extras)
+void testeMilVertices(int dir){
+    clock_t inicio = clock();
+    Grafo *g = lerArquivo("grafo1000.txt", dir);
+    clock_t final = clock();
+    printf("Tempo para ler grafo com 1000 vertices eh de: %lfs\n", (double)(final - inicio) / CLOCKS_PER_SEC);
+    inicio = clock();
+    Grafo *h = lerArquivo("grafo2000.txt", dir);
+    final = clock();
+    printf("Tempo para ler grafo com 2000 vertices eh de: %lfs\n", (double)(final - inicio) / CLOCKS_PER_SEC);
+    inicio = clock();
+    Grafo *i = lerArquivo("grafo5000.txt", dir);
+    final = clock();
+    printf("Tempo para ler grafo com 5000 vertices eh de: %lfs\n", (double)(final - inicio) / CLOCKS_PER_SEC);
+}
+
+void Estatisticas(Grafo* g)
+{
+    if (g == NULL) return;
+    int V = g->V;
+    int A = g->A;
+    int var = 0;
+
+    float densidade = 0;
+
+    printf("O grafo tem %d vertices e %d arestas.\n", V, A);
+    int grau = 0;
+    int conexo = 0;
+    No* aux = NULL;
+
+    for (int i = 0; i < V; i++)
+    {
+        aux = g->lista[i];
+        while (aux !=NULL)
+        {
+            grau++;
+            aux = aux->prox;
+        }
+        printf("O grau do vertice %d eh %d\n", i, grau);
+        grau = 0;
+    }
+    aux = NULL;
+
+    for (int i = 0; i < V; i++)
+    {
+        aux = g->lista[i];
+        if (aux == NULL) var = 1;
+    }
+    if (var == 1)
+        printf("O grafo ñ eh conexo.\n");
+    else
+        printf("O grafo eh conexo.\n");
+
+    if (temCiclo(g))
+        printf("O grafo tem ciclos.\n");
+    else
+        printf("O grafo ñ tem ciclos.\n");
+
+    if (g->direcionado == 1)
+        printf("O grafo eh direcionado.\n");
+    else
+        printf("O grafo ñ eh direcionado.\n");
+
+    if (g->direcionado == 1)
+    {
+        densidade = V/V*(V-1);
+        printf("A densidade do grafo eh %2.f\n", densidade);
+    } else
+    {
+        densidade = 2*A/V*(V-1);
+        printf("A densidade do grafo eh %2.f\n", densidade);
+    }
+}
 
 Grafo *criarGrafo(int quantVertices) {
     Grafo *g = (Grafo *)malloc(sizeof(Grafo));
