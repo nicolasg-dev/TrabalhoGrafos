@@ -202,11 +202,11 @@ void freeGrafo(Grafo* g){
         {
             aux = g->lista[i];
             ant = NULL;
-            while (aux != NULL)
+            while (aux != NULL)   //Percorre toda a lista de adjacência através de seus ponteiros prox
             {
                 ant = aux;
                 aux = aux->prox;
-                free(ant);
+                free(ant);  //Libera as memórias alocadas pelos nos
             }
         }
     }
@@ -219,12 +219,13 @@ void mostrarGrafo(Grafo* g) {
         printf("Grafo vazio!\n");
         return;
     }
+    No* aux = NULL;
 
     for (int i = 0; i < g->V; i ++)
     {
-        No * aux = g->lista[i];
+        aux = g->lista[i];
         printf("V%d ->" , i);
-        while (aux != NULL)
+        while (aux != NULL)   //Percorre toda a lista de adjacência através de seus ponteiros prox
         {
             printf(" V%d (%d) ->", aux->destino, aux->peso);
             aux = aux->prox;
@@ -239,7 +240,7 @@ void removeVertice(Grafo *g, int alvo) {
     for (int i = 0; i < g->V; i++)
     {
         aux = g->lista[i];
-        while (aux != NULL)
+        while (aux != NULL)  //Percorre toda a lista de adjacência através de seus ponteiros prox
         {
             if (aux->destino == alvo)
             {
