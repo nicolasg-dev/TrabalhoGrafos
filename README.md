@@ -1,9 +1,13 @@
 ## Membros
 
 ANGELO
+
 GABRIELA 
+
 NICOLAS 
+
 PEDRO LUCAS
+
 RENATO
 
 ## Compilação
